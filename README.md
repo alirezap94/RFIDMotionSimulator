@@ -24,9 +24,7 @@ Navigate to the project directory to access the scripts.
 
 ## Usage
 To utilize the simulation:
-
-1. Run the `init_RFID.m` function to initialize parameters.
-2. Execute the main script to observe the simulation results.
+Execute **`main.m`** to observe the simulation results.
 
 ## Scripts Description
 
