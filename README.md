@@ -6,11 +6,15 @@ This repository contains MATLAB scripts for simulating RFID communication, accou
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Scripts Description](#scripts-description)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Overview
+The simulation explores the impact of person presence, channel conditions, and RFID signal properties on the transmission and reception of RFID signals. It simulates an end-to-end RFID communication process, from initializing parameters, transmitting signals, channel effects, to the receiver. The simulation includes aspects like BPSK modulation, Rayleigh fading, noise, and path effects which are pivotal in real-world scenarios.
 
 ## Installation
 
