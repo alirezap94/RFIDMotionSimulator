@@ -30,6 +30,7 @@ t.NPacketSamples = t.Npacket * t.F_s/t.R_s ; % Number of samples per packet
 
 % Channel and Environment Specifications
 t.vmax = 1.5; % Maximum relative velocity between transmitter and receiver in m/s 
+t.dopplermax = t.fc / t.c * t.vmax; 
 
 % Multi-Path Effect Parameters
 t.tau = zeros(3,1);         % Initializing path delays
