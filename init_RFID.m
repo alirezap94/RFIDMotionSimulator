@@ -41,7 +41,8 @@ t.pdb = zeros(3,1);         % Initializing path gains
 t.pdb(2:3) = -10*rand(2,1); % Randomizing path gains in dB for non-direct paths 
 
 % Signal to Noise Ratio (SNR) Configurations
-t.SNR = -10*rand();  % Random SNR value. Adapt the range according to your specific scenario.
+t.Distance = 1; 
+t.SNRinit = -10*rand(); % Random SNR value. Adapt the range according to your specific scenario.
 
 % Observation Interval
 t.NObservedInterval = t.NIntervalSamples + 100; % Adjusting observation interval considering maximum delay
