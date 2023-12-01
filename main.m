@@ -44,4 +44,5 @@ smoothed_data = movmean(PowerObservation, window_size, 'Endpoints','discard');
 
 % VISUALIZATION
 % Plotting the smoothed data for visualization and analysis
-plot(smoothed_data)
+figure; plot(linspace(0, t.T_tot * IterTransmission, length(smoothed_data)), smoothed_data); 
+figure; plot(linspace(0, t.T_tot * IterTransmission, length(person_movement)), person_movement)
