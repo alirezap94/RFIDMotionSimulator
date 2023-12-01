@@ -13,6 +13,7 @@ t = init_RFID(); % Initializing RFID parameters and settings through a custom fu
 
 % Pre-allocating observation vector to store received signals over multiple transmissions
 Observation = zeros(NumTransmissions * t.NObservedInterval, 1); 
+person_movement = zeros(NumTransmissions,1); 
 
 % MAIN SIMULATION LOOP
 for IterTransmission = 1:NumTransmissions
@@ -24,6 +25,7 @@ for IterTransmission = 1:NumTransmissions
     % CHANNEL
     % Modeling the channel effects (multipath, fading, etc.) on the transmitted signal
     t = channel_RFID(t, PersonPresnt);  
+    person_movement(IterTransmission) = t.Distance;
     
     % STORING OBSERVATIONS
     % Extracting and storing the observed interval for each transmission cycle
