@@ -38,9 +38,9 @@ if PersonPresent
     % Setting the large-scale path loss coefficient (2.5 as a general value/ 
     % please check the standard for specific case scenarios)
     t.large_scale_coeff = 2.5;
-    % Recalculating SNR based on the new distance and large-scale path loss coefficient
-    % SNR reduction proportional to the logarithm of the ratio of new to old distance
-    t.SNR = t.SNRinit - 10 * t.large_scale_coeff * log10 (t.DistanceNew / t.Distance) ; 
+    % Recalculating RSSI based on the new distance and large-scale path loss coefficient
+    % RSSI reduction proportional to the logarithm of the ratio of new to old distance
+    t.RSSI = t.RSSIinit - 10 * t.large_scale_coeff * log10 (t.DistanceNew / t.Distance) ; 
     % Updating the distance to the new calculated value
     t.Distance = t.DistanceNew; 
     
@@ -72,8 +72,10 @@ Rx = [t.transmitted_signal; zeros(t.NDelaySamples,1)];
 % Use Rayleigh channel model to get the faded signal
 [t.RxFaded, ~] = rayleighChan(Rx);
 
+t.RxLargeScale = sqrt(10^(t.RSSI/10)) *t.RxFaded; 
+
 % Introduce Noise
-t.RxNoisyFaded = awgn(t.RxFaded, t.SNR);
+t.RxNoisyFaded = t.RxLargeScale + sqrt(10^(t.NoiseFloor/10))*randn(size(t.RxFaded));
 
 %% OBSERVATION INTERVAL DEFINITION
 
