@@ -16,11 +16,33 @@ function t = channel_RFID(t, PersonPresent)
 %% CONDITIONAL CHANNEL BEHAVIOR
 
 if PersonPresent
-    % If a person is present, modify tau and pdb with some random variation and
-    % add a random component to SNR (Signal to Noise Ratio)
+    % If a person is present, apply random variations to tau and pdb
+    % tau modification: Adding small random noise (10^-10 scale) to elements 2 and 3 of tau array
     t.tau(2:3) = t.tau(2:3) + 1e-10*randn(2,1);
+    % pdb modification: Adding standard Gaussian random noise to elements 2 and 3 of pdb array
     t.pdb(2:3) = t.pdb(2:3) + randn(2,1);
-    t.SNR = t.SNR + 1e-1*randn(); 
+
+    %%% Large-scale path loss calculation: 
+    dist_flag = true;
+    while dist_flag
+        % Adjusting the distance based on the total time and relative speed
+        % New distance calculation with a random component
+        t.deltaDist = t.T_tot * (rand() - 0.5)*t.vmax; 
+        t.DistanceNew = t.Distance + t.deltaDist; 
+        % Ensuring the new distance is within a valid range (0 to 10 meters)
+        if (t.DistanceNew > 0) && (t.DistanceNew < 10)
+            dist_flag = false; 
+        end
+    end
+    
+    % Setting the large-scale path loss coefficient (2.5 as a general value/ 
+    % please check the standard for specific case scenarios)
+    t.large_scale_coeff = 2.5;
+    % Recalculating SNR based on the new distance and large-scale path loss coefficient
+    % SNR reduction proportional to the logarithm of the ratio of new to old distance
+    t.SNR = t.SNRinit - 10 * t.large_scale_coeff * log10 (t.DistanceNew / t.Distance) ; 
+    % Updating the distance to the new calculated value
+    t.Distance = t.DistanceNew; 
     
     % Initialize RayleighChannel object with the person's presence affecting the channel
     rayleighChan = comm.RayleighChannel( ...
