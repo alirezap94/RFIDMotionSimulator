@@ -6,15 +6,14 @@ clc; clear; close all;  % Clearing console, variables, and closing all figures
 
 % PARAMETERS
 NumTransmissions = 10; % Total number of RFID transmissions (in seconds)
-PersonPresnt = true;   % Logical flag indicating the presence of a person
+PersonPresent = true;   % Logical flag indicating the presence of a person
 
 % INITIALIZATION
-t = init_RFID(); % Initializing RFID parameters and settings through a custom function
+t = init_RFID(PersonPresent); % Initializing RFID parameters and settings through a custom function
 
 % Pre-allocating observation vector to store received signals over multiple transmissions
 Observation = zeros(NumTransmissions * t.NObservedInterval, 1); 
 person_movement = zeros(NumTransmissions,1); 
-
 % MAIN SIMULATION LOOP
 for IterTransmission = 1:NumTransmissions
     
@@ -24,14 +23,13 @@ for IterTransmission = 1:NumTransmissions
     
     % CHANNEL
     % Modeling the channel effects (multipath, fading, etc.) on the transmitted signal
-    t = channel_RFID(t, PersonPresnt);  
+    t = channel_RFID(t, PersonPresent);  
     person_movement(IterTransmission) = t.Distance;
     
     % STORING OBSERVATIONS
     % Extracting and storing the observed interval for each transmission cycle
     interval = t.NObservedInterval*(IterTransmission-1) + 1:t.NObservedInterval*(IterTransmission);  
     Observation(interval) = t.ObservedInterval; 
-    
 end
 
 % SIGNAL PROCESSING
@@ -44,5 +42,6 @@ smoothed_data = movmean(PowerObservation, window_size, 'Endpoints','discard');
 
 % VISUALIZATION
 % Plotting the smoothed data for visualization and analysis
-figure; plot(linspace(0, t.T_tot * IterTransmission, length(smoothed_data)), smoothed_data); 
-figure; plot(linspace(0, t.T_tot * IterTransmission, length(person_movement)), person_movement)
+% figure; plot(linspace(0, t.T_tot * IterTransmission, length(PowerObservation)), PowerObservation); 
+figure; plot(linspace(0, t.T_tot * IterTransmission, length(smoothed_data)), smoothed_data); title('Received Signal at the IDF')
+figure; plot(linspace(0, t.T_tot * IterTransmission, length(person_movement)), person_movement); title('Large-Scale Movements')
