@@ -53,7 +53,7 @@ if PersonPresent
         'PathGainsOutputPort', true);
 else 
     % If no person is present, use the existing tau, pdb, and SNR without additional noise
-    
+    t.RSSI = t.RSSIinit; 
     % Initialize RayleighChannel object without person's presence affecting the channel
     rayleighChan = comm.RayleighChannel( ...
         'SampleRate', t.F_s, ...
