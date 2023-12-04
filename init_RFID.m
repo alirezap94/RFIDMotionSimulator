@@ -1,4 +1,4 @@
-function t = init_RFID()
+function t = init_RFID(PersonPresent)
 % INIT_RFID: Initialize parameters related to RFID transmission and channel
 % The function returns a structured array "t" containing all necessary parameters
 % and configurations for simulating RFID transmission in a specific channel.
@@ -29,8 +29,8 @@ t.NPacketSamples = t.Npacket * t.F_s/t.R_s ; % Number of samples per packet
 %% CHANNEL PARAMETERS INITIALIZATION
 
 % Channel and Environment Specifications
-t.vmax = 1.5; % Maximum relative velocity between transmitter and receiver in m/s 
-t.dopplermax = t.fc / t.c * t.vmax; 
+t.vmax = 1.5; % Maximum relative velocity between transmitter and receiver in m/s
+t.dopplermax = t.fc / t.c * t.vmax;
 
 % Multi-Path Effect Parameters
 t.tau = zeros(3,1);         % Initializing path delays
@@ -38,15 +38,35 @@ t.tau(2:3) = 1e-8*rand(2,1);% Randomizing additional path delays in seconds for 
 
 % Path Gain Settings
 t.pdb = zeros(3,1);         % Initializing path gains
-t.pdb(2:3) = -10*rand(2,1); % Randomizing path gains in dB for non-direct paths 
+t.pdb(2:3) = -10*rand(2,1); % Randomizing path gains in dB for non-direct paths
 
 % Signal to Noise Ratio (SNR) Configurations
-t.Distance = 1; 
+t.Distance = 1;
 t.RSSIinit = -90 - 10*rand(); % Random RSSI value. Adapt the range according to your specific scenario.
-t.NoiseFloor = -100; % dB 
+t.NoiseFloor = -100; % dB
 
 % Observation Interval
 t.NObservedInterval = t.NIntervalSamples + 100; % Adjusting observation interval considering maximum delay
+
+
+if PersonPresent
+    % Initialize RayleighChannel object with the person's presence affecting the channel
+    t.rayleighChan = comm.RayleighChannel( ...
+        'SampleRate', t.F_s, ...
+        'PathDelays', t.tau.', ...
+        'AveragePathGains', t.pdb.', ...
+        'MaximumDopplerShift', t.dopplermax, ...
+        'PathGainsOutputPort', true);
+else
+    % Initialize RayleighChannel object without person's presence affecting the channel
+    t.rayleighChan = comm.RayleighChannel( ...
+        'SampleRate', t.F_s, ...
+        'PathDelays', t.tau.', ...
+        'AveragePathGains', t.pdb.', ...
+        'MaximumDopplerShift', 0, ...
+        'PathGainsOutputPort', true);
+
+end
 
 %% Additional Notes
 % *Power*:
