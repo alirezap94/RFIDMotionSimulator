@@ -44,6 +44,9 @@ t.pdb(2:3) = -10*rand(2,1); % Randomizing path gains in dB for non-direct paths
 t.Distance = 1;
 t.RSSIinit = -90 - 10*rand(); % Random RSSI value. Adapt the range according to your specific scenario.
 t.NoiseFloor = -100; % dB
+% Setting the large-scale path loss coefficient (2.5 as a general value/ 
+% please check the standard for specific case scenarios)
+t.large_scale_coeff = 2.5;
 
 % Observation Interval
 t.NObservedInterval = t.NIntervalSamples + 100; % Adjusting observation interval considering maximum delay
