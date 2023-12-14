@@ -29,9 +29,6 @@ if PersonPresent
         end
     end
     
-    % Setting the large-scale path loss coefficient (2.5 as a general value/ 
-    % please check the standard for specific case scenarios)
-    t.large_scale_coeff = 2.5;
     % Recalculating RSSI based on the new distance and large-scale path loss coefficient
     % RSSI reduction proportional to the logarithm of the ratio of new to old distance
     t.RSSI = t.RSSIinit - 10 * t.large_scale_coeff * log10 (t.DistanceNew) ; 
